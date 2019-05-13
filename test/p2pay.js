@@ -25,13 +25,17 @@ contract('P2Pay', async (accounts) => {
   const getVerifyArgs = (accountIndex) => {
     var msg = 'The text in your message here'
     var h = web3.utils.keccak256(msg)
+//    var h = web3.sha3(msg)
 
-    const mnemonic = "quote banner busy inspire junior recall minor toward sausage daring day found"
+//    const mnemonic = "quote banner busy inspire junior recall minor toward sausage daring day found"
+//    const mnemonic = "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+    const mnemonic = "multiply second flower shell home hip save boss amused clap want fresh"
     const seed = bip39.mnemonicToSeed(mnemonic)
     const hdk = hdkey.fromMasterSeed(seed)
     const addr_node = hdk.derivePath("m/44'/60'/0'/0/" + accountIndex)
     let addr = addr_node.getWallet().getAddressString()
     addr = web3.utils.toChecksumAddress(addr)
+//    addr = web3.toChecksumAddress(addr)
     const privKey = addr_node.getWallet().getPrivateKey()
 
     h = ethUtils.toBuffer(h)
@@ -56,6 +60,7 @@ contract('P2Pay', async (accounts) => {
 
     var org = "Org Name Ltd 2"
     var orgHash = web3.utils.keccak256(org)
+//    var orgHash = web3.sha3(org)
     var orgWallet = wallet.generate()
     var orgAddress = orgWallet.getAddressString()
     var result = await instanceP2Pay.newOrg(orgHash, orgAddress, 2, sortedAccounts)
@@ -98,6 +103,7 @@ contract('P2Pay', async (accounts) => {
 
     var org = "Org Name Ltd 3"
     var orgHash = web3.utils.keccak256(org)
+//    var orgHash = web3.sha3(org)
     var orgWallet = wallet.generate()
     var orgAddress = orgWallet.getAddressString()
     var result = await instanceP2Pay.newOrg(orgHash, orgAddress, 2, [sortedAccounts[0],sortedAccounts[1]])
@@ -118,12 +124,12 @@ contract('P2Pay', async (accounts) => {
     var result = await instanceP2Pay.getSingersAndThreshold(orgHash)
 //    console.log(result[0])
 //    console.log(result[1].toNumber())
-/*
     console.log(orgHash, orgAddress, 2, sortedAccounts)
 
     var result = await instanceP2Pay.getSingersAndThreshold(orgHash)
 //    console.log(result)
 
+/*
     var result = await instanceP2Pay.newOrg(orgHash, orgAddress, 2, sortedAccounts)
     console.log(result.logs[0].event)
     console.log(result.logs[0].args)
@@ -141,11 +147,12 @@ contract('P2Pay', async (accounts) => {
 
     var org = "Org Name Ltd 4"
     var orgHash = web3.utils.keccak256(org)
+//    var orgHash = web3.sha3(org)
     var orgWallet = wallet.generate()
     var orgAddress = orgWallet.getAddressString()
     var result = await instanceP2Pay.newOrg(orgHash, orgAddress, 2, [sortedAccounts[0],sortedAccounts[1]])
     console.log(result.receipt.gasUsed)
-    console.log(result.logs[0].args[0].toNumber())
+//    console.log(result.logs[0].args[0].toNumber())
 //console.log([sortedAccounts[0],sortedAccounts[1]])
 
     var result = await instanceP2Pay.getSingersAndThreshold(orgHash)
@@ -169,14 +176,19 @@ contract('P2Pay', async (accounts) => {
     // test deposit txType = 1
     var txType = 1
     var projectRef = web3.utils.fromAscii('test project name')
-//console.log(v)
+//    var projectRef = web3.fromAscii('test project name')
+
+console.log("addresses",addresses)
+
     var result = await instanceP2Pay.
       verifyAndSend(orgHash, v, r, s, h, addresses, value, curType, projectRef, addressTo, txType)
-//    console.log(result.logs)
+    console.log(result.logs)
 
     var balance = await instanceP2Pay.getBalance(accounts[0], 3)
     console.log("balance ASD user 0 ")
     console.log("0 ASD: " + balance.toNumber())
+/*
+*/
   })
 
 })

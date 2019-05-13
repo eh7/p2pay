@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity >=0.4.25;
 
 contract Owned {
 
@@ -22,7 +22,7 @@ contract Owned {
     }
 }
 
-contract Disberse is Owned {
+contract P2Pay is Owned {
 
   event Int(uint _number);
 //  event Bytes32(bytes32 _h);
@@ -49,36 +49,10 @@ contract Disberse is Owned {
 
   mapping (address => balance) balances;
 
-/*
-  mapping (uint => string) public token_type;
-  uint public token_type_count = 0;
-
-
-  mapping (uint => bytes8) public ref;
-  mapping (uint => string) public note;
-  mapping (uint => address) public address_from;
-  mapping (uint => uint) public tx_token_type;
-
-  uint public note_count = 0;
-*/
-
-
   // Note that owners_ array must be strictly increasing, 
   // in order to prevent duplicates
   constructor() public {
   }
-
-/*
-  function initOrgSigner(bytes32 _orgHash, address[] memory _owners) internal { 
-    address lastAdd = address(0);
-    for (uint i=0; i<_owners.length; i++) {
-//      require(_owners[i] > lastAdd);
-      orgSignerCheck[_orgHash][_owners[i]] = true;
-      lastAdd =  _owners[i];
-    }
-    orgSigners[_orgHash] = _owners;
-  }
-*/
 
   function updateOrg(bytes32 _orgHash, address _orgAddress, uint _threshold, address[] memory _owners) public returns (bool) { //returns (bytes32, address, uint, address[] memory) {
     require(orgSigners[_orgHash].length > 0);
@@ -91,7 +65,7 @@ contract Disberse is Owned {
       orgSignerCheck[_orgHash][orgSigners[_orgHash][i]] = false;
     }
     address lastAdd = address(0);
-    for (uint i=0; i<_owners.length; i++) {
+    for(uint i=0; i<_owners.length; i++) {
 //      emit Addrs(_owners[i], lastAdd);
       require(_owners[i] > lastAdd);
       orgSignerCheck[_orgHash][_owners[i]] = true;
@@ -128,38 +102,12 @@ contract Disberse is Owned {
     return true;
   }
 
-/*
-  function editOrg(bytes32 _orgHash, address _orgAddress, uint _threshold, address[] memory _owners) public returns (bool) { //returns (bytes32, address, uint, address[] memory) {
-    emit Status(67, _orgHash);
-    require( 
-      _threshold > 0 &&
-      _owners.length <= 10 && 
-      _threshold <= _owners.length 
-    );
-    emit Status(68, _orgHash);
-    if(orgOwner[_orgHash] == address(0)){
-      initOrgSigner(_orgHash, _owners);    
-      orgOwner[_orgHash] = msg.sender;
-      orgAddress[_orgHash] = _orgAddress;
-      orgSignerThreshold[_orgHash] = uint(_threshold);
-      emit Status(2, _orgHash);
-      return true;
-    } else {
-      if(msg.sender == orgOwner[_orgHash]) {
-        initOrgSigner(_orgHash, _owners);    
-        orgSignerThreshold[_orgHash] = uint(_threshold);
-        emit Status(3, _orgHash);
-        return true;
-      } else { return false; }
-    }
-  }
-*/
-
   function getSingersAndThreshold(bytes32 _orgHash) public view returns (address[] memory signers, uint threshold) {
     return (orgSigners[_orgHash], orgSignerThreshold[_orgHash]);
   }
 
   function verify(bytes32 _orgHash, uint8[] memory sigV, bytes32[] memory sigR, bytes32[] memory sigS, bytes32[] memory _h, address[] memory signers, uint _value, uint _type, bytes8 projectName, address _to, uint _txType) public  returns (uint status, address[] memory retSigners) {
+/*
     require(sigR.length == orgSignerThreshold[_orgHash], "threshold not correct");
     require(sigR.length == sigS.length && sigR.length == sigV.length, "sig data not complete");
 
@@ -173,6 +121,7 @@ contract Disberse is Owned {
       lastAdd = addr;
     }
 
+*/
     return (0, signers);
   }
 
